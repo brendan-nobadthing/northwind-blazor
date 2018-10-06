@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RestoreAdditionalProjectSources>
+      https://dotnet.myget.org/f/blazor-dev/api/v3/index.json;
+    </RestoreAdditionalProjectSources>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="5.1.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="5.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor.Server" Version="0.6.0-preview1-final" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NorthwindApplication\NorthwindApplication.csproj" />
+    <ProjectReference Include="..\NorthwindBlazor.Client\NorthwindBlazor.Client.csproj" />
+    <ProjectReference Include="..\NorthwindBlazor.Shared\NorthwindBlazor.Shared.csproj" />
+    <ProjectReference Include="..\Northwind\Northwind.csproj" />
+  </ItemGroup>
+
+</Project>

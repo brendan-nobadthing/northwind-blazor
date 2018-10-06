@@ -1,0 +1,49 @@
+﻿@using NorthwindBlazor.Shared
+@using NorthwindBlazor.Shared.Customer
+@page "/customers"
+@inject HttpClient Http
+
+<h1>Customers</h1>
+
+
+@if (customers == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Company Name</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>Contact</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in customers)
+            {
+                <tr>
+                    <td>@customer.CustomerId</td>
+                    <td>@customer.CompanyName</td>
+                    <td>@customer.Address</td>
+                    <td>@customer.City</td>
+                    <td>@customer.ContactName</td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@functions {
+    CustomerModel[] customers = null;
+
+    protected override async Task OnInitAsync()
+    {
+        customers = await Http.GetJsonAsync<CustomerModel[]>("api/customer/list");
+    }
+}
