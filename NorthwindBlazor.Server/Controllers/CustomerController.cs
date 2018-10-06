@@ -22,10 +22,22 @@ namespace NorthwindBlazor.Server.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("list")]
         public  Task<IEnumerable<CustomerModel>> List(CancellationToken cancellationToken)
         {
             return _mediator.Send(new GetCustomers(), cancellationToken);
+        }
+           
+        [HttpPost("save")]
+        public Task<CustomerModel> SaveCustomer ([FromBody] CustomerModel customer, CancellationToken cancellationToken)
+        {
+            return _mediator.Send(new SaveCustomer(customer), cancellationToken);
+        }
+        
+        [HttpGet("get/{customerId}")]
+        public Task<CustomerModel> GetCustomer ([FromRoute] string customerId, CancellationToken cancellationToken)
+        {
+            return _mediator.Send(new GetCustomer(customerId), cancellationToken);
         }
     }
 }
