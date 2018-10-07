@@ -9,7 +9,12 @@
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
+    <ItemGroup>
+        <BlazorLinkerDescriptor Include="linker.xml" />
+    </ItemGroup>
+
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="8.0.100" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Browser" Version="0.6.0-preview1-final" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Build" Version="0.6.0-preview1-final" PrivateAssets="all" />
   </ItemGroup>

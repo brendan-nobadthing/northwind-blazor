@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Blazor;
 using NorthwindBlazor.Shared.Customer;
 
@@ -40,6 +43,9 @@ namespace NorthwindBlazor.Client.Services
 
         public async Task<CustomerModel> SaveCustomer(CustomerModel customer)
         {
+            var validator = new CustomerModelValidator();
+            validator.ValidateAndThrow(customer);
+            
             return await _httpClient.PostJsonAsync<CustomerModel>("/api/customer/save", customer);
         }
     }

@@ -1,4 +1,5 @@
 ﻿@using System.Net
+@using FluentValidation
 @using NorthwindBlazor.Client.Services
 @using NorthwindBlazor.Shared.Customer
 
@@ -15,11 +16,12 @@
 }
 else
 {
-    <form>
+    <form novalidate>
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="companyName">Company Name</label>
                 <input type="text" class="form-control" id="companyName" placeholder="Company Name" bind="@customer.CompanyName" />
+                <ErrorFor Property="CompanyName" ValidationException="@customerValidationException" />
             </div>
             <div class="form-group col-md-6">
                 <label for="contactName">Contact Name</label>
@@ -52,6 +54,7 @@ else
     string CustomerId { get; set; }
     
     CustomerModel customer = null;
+    ValidationException customerValidationException = null;
 
     protected override async Task OnInitAsync()
     {
@@ -67,8 +70,15 @@ else
 
     private async Task Save()
     {
-        customer = await CustomerService.SaveCustomer(customer);
-        UriHelper.NavigateTo("/customers");
+        try
+        {
+            customer = await CustomerService.SaveCustomer(customer);
+            UriHelper.NavigateTo("/customers");
+        }
+        catch (ValidationException ve)
+        {
+            customerValidationException = ve;
+        }
     }
 
     private void Cancel()

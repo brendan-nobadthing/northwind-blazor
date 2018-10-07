@@ -1,0 +1,22 @@
+﻿@using FluentValidation
+
+@if (ValidationException != null && ValidationException.Errors.Any(e => e.PropertyName == Property))
+{
+    foreach (var error in ValidationException.Errors.Where(e => e.PropertyName == Property))
+    {
+        <div class="text-danger">
+            @error.ErrorMessage
+        </div>
+    }
+}
+    
+
+
+@functions {
+    [Parameter]
+    string Property { get; set; }
+
+    [Parameter]
+    ValidationException ValidationException { get; set; }
+
+}
