@@ -13,6 +13,8 @@ namespace NorthwindBlazor.Client.Services
     public interface ICustomerService
     {
         Task<IEnumerable<CustomerModel>> GetCustomers();
+        
+        Task<IEnumerable<CustomerModel>> GetCustomers(string searchText);
 
         Task<CustomerModel> GetCustomer(string customerId);
 
@@ -34,6 +36,11 @@ namespace NorthwindBlazor.Client.Services
         public async Task<IEnumerable<CustomerModel>> GetCustomers()
         {
             return await _httpClient.GetJsonAsync<CustomerModel[]>("api/customer/list");
+        }
+
+        public async Task<IEnumerable<CustomerModel>> GetCustomers(string searchText)
+        {
+            return await _httpClient.GetJsonAsync<CustomerModel[]>($"api/customer/list?searchText={searchText}");
         }
 
         public async Task<CustomerModel> GetCustomer(string customerId)

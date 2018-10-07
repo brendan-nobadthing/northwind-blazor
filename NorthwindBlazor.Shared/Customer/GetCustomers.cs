@@ -5,8 +5,6 @@ namespace NorthwindBlazor.Shared.Customer
 {
     public class GetCustomers : IRequest<IEnumerable<CustomerModel>>
     {
-        public int PageIndex { get; set; }
-        
-        public int PageSize { get; set; }
+        public string SearchText { get; set; }
     }
 }

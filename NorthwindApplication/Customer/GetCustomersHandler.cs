@@ -24,7 +24,7 @@ namespace NorthwindApplication.Customer
 
         public async Task<IEnumerable<CustomerModel>> Handle(GetCustomers request, CancellationToken cancellationToken)
         {
-            return await _dbCtx.Customers.Select(c => new CustomerModel()
+            var query =  _dbCtx.Customers.Select(c => new CustomerModel()
             {
                 Address = c.Address,
                 City = c.City,
@@ -33,7 +33,14 @@ namespace NorthwindApplication.Customer
                 CustomerId = c.CustomerId
             })
             .OrderBy(c => c.CompanyName)
-            .ToListAsync(cancellationToken);
+            .AsQueryable();
+
+            if (!string.IsNullOrEmpty(request.SearchText))
+            {
+                query = query.Where(c => c.CompanyName.ToLower().StartsWith(request.SearchText.ToLower()));
+            }
+                
+            return await query.ToListAsync(cancellationToken);
         }
     }
     

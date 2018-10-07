@@ -1,4 +1,6 @@
 ﻿@using System.Net
+@using System.Reactive.Linq
+@using System.Reactive.Subjects
 @using NorthwindBlazor.Client.Services
 @using NorthwindBlazor.Shared.Customer
 @page "/customers"
@@ -6,6 +8,14 @@
 
 <h1>Customers</h1>
 
+<form class="form-inline">
+    <div class="input-group mb-2 mr-sm-2">
+        <div class="input-group-append">
+            <div class="input-group-text">Search</div>
+        </div>
+        <input type="text" class="form-control" id="search" placeholder="" value="@searchText" onkeyup="@SearchChanged" />
+    </div>
+</form>
 
 @if (customers == null)
 {
@@ -43,8 +53,41 @@ else
 @functions {
     IEnumerable<CustomerModel> customers = null;
 
-    protected override async Task OnInitAsync()
+    string searchText = string.Empty;
+    BehaviorSubject<string> searchTextSubject = new BehaviorSubject<string>("");
+    
+    protected override Task OnInitAsync()
     {
-        customers = await CustomerService.GetCustomers();
+        var sub = searchTextSubject
+            .Throttle(TimeSpan.FromSeconds(1))
+            .DistinctUntilChanged()
+            .Subscribe(async txt => await LoadCustomers(txt));
+
+        return Task.CompletedTask;
+    }
+
+    protected async Task LoadCustomers(string searchText)
+    {
+        Console.WriteLine($"load customers for search '{searchText}'");
+        this.customers = null;
+        StateHasChanged();
+        this.customers = await CustomerService.GetCustomers(searchText);
+        Console.WriteLine($"got {this.customers.Count()} customers");
+        StateHasChanged();
+    }
+
+    protected void SearchChanged(UIKeyboardEventArgs args)
+    {
+        if (args.Key == "Backspace")
+        {
+            searchText = searchText.Substring(0, searchText.Length - 1);
+        }
+        else if (args.Key.Length == 1)
+        {
+            searchText += args.Key;
+        }
+        Console.WriteLine($"searchText change to {searchText}");
+        searchTextSubject.OnNext(searchText);
+        
     }
 }

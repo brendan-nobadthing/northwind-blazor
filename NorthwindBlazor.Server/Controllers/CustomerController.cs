@@ -23,9 +23,9 @@ namespace NorthwindBlazor.Server.Controllers
         }
 
         [HttpGet("list")]
-        public  Task<IEnumerable<CustomerModel>> List(CancellationToken cancellationToken)
+        public  Task<IEnumerable<CustomerModel>> List([FromQuery]string searchText, CancellationToken cancellationToken)
         {
-            return _mediator.Send(new GetCustomers(), cancellationToken);
+            return _mediator.Send(new GetCustomers() {SearchText = searchText} , cancellationToken);
         }
            
         [HttpPost("save")]
