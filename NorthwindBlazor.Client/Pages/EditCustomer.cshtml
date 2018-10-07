@@ -1,7 +1,9 @@
-﻿@using NorthwindBlazor.Shared
+﻿@using System.Net
+@using NorthwindBlazor.Client.Services
 @using NorthwindBlazor.Shared.Customer
+
 @page "/customer/{CustomerId}"
-@inject HttpClient Http
+@inject ICustomerService CustomerService
 @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
 
 <h1>Edit Customers</h1>
@@ -59,13 +61,13 @@ else
         }
         else
         {
-            customer = await Http.GetJsonAsync<CustomerModel>($"/api/customer/get/{CustomerId}");
+            customer = await CustomerService.GetCustomer(CustomerId);
         }
     }
 
     private async Task Save()
     {
-        customer = await Http.PostJsonAsync<CustomerModel>("/api/customer/save", customer);
+        customer = await CustomerService.SaveCustomer(customer);
         UriHelper.NavigateTo("/customers");
     }
 

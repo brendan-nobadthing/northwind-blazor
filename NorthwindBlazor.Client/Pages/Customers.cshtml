@@ -1,7 +1,8 @@
-﻿@using NorthwindBlazor.Shared
+﻿@using System.Net
+@using NorthwindBlazor.Client.Services
 @using NorthwindBlazor.Shared.Customer
 @page "/customers"
-@inject HttpClient Http
+@inject ICustomerService CustomerService
 
 <h1>Customers</h1>
 
@@ -40,10 +41,10 @@ else
 }
 
 @functions {
-    CustomerModel[] customers = null;
+    IEnumerable<CustomerModel> customers = null;
 
     protected override async Task OnInitAsync()
     {
-        customers = await Http.GetJsonAsync<CustomerModel[]>("api/customer/list");
+        customers = await CustomerService.GetCustomers();
     }
 }
